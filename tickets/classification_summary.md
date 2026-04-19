@@ -18,4 +18,4 @@ This file contains the classification of tickets in the `tickets` folder based o
 | **Medium** | TICKET-005 | Edit Newly Created Form | ***
 | **Medium** | TICKET-013 | CSV Export Characters | ***
 | **Medium** | TICKET-014 | Submissions Pagination | ***
-| **Medium** | TICKET-015 | File Uploads |
+| **Medium** | TICKET-015 | File Uploads | ***

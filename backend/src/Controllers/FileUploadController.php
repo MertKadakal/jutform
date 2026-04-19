@@ -37,7 +37,11 @@ class FileUploadController
         $orig = $_FILES['file']['name'];
         $mime = $_FILES['file']['type'] ?? 'application/octet-stream';
         $size = (int) ($_FILES['file']['size'] ?? 0);
-        $target = self::uploadDir() . '/' . basename($orig);
+        
+        // TICKET-015 Fix: Generate a unique filename to prevent collisions
+        $storedName = uniqid('file_', true) . '_' . basename($orig);
+        $target = self::uploadDir() . '/' . $storedName;
+        
         if (!move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
             Response::error('Upload failed', 500);
         }
