@@ -25,6 +25,8 @@ class FormController
         $owner = User::find($uid);
         $ownerDisplayName = $owner['display_name'] ?? $owner['username'] ?? '';
         
+        // TICKET-007 Fix: We use findByUserWithStats to solve the N+1 query problem.
+        // This fetches all forms and their submission counts in a single efficient query.
         $forms = Form::findByUserWithStats($uid);
         $out = [];
         foreach ($forms as $f) {
