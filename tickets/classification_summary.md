@@ -9,8 +9,8 @@ This file contains the classification of tickets in the `tickets` folder based o
 | **Critical** | TICKET-011 | Submissions Incident | ***
 | **Critical** | TICKET-012 | Advanced Search Review | ***
 | **High** | TICKET-002 | Form Settings Save | ***
-| **High** | TICKET-004 | Notification Emails |
-| **High** | TICKET-006 | Search Performance |
+| **High** | TICKET-004 | Notification Emails | ***
+| **High** | TICKET-006 | Search Performance | ***
 | **High** | TICKET-007 | Forms List Load Time |
 | **High** | TICKET-008 | Revenue Totals |
 | **Medium** | TICKET-001 | Scheduled Emails |

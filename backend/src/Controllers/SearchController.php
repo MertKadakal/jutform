@@ -18,14 +18,23 @@ class SearchController
         $term = trim((string) $request->query('q', ''));
         if ($term === '') {
             Response::json(['results' => []]);
+            return;
         }
         $pdo = Database::getInstance();
+        
+        // TICKET-006 Optimizasyonu: app_config yerine forms tablosunu tarıyoruz.
+        // FULLTEXT indeksi ve LIKE kombinasyonu ile hem kesin hem de hızlı sonuç alıyoruz.
         $like = '%' . $term . '%';
-        $stmt = $pdo->prepare(
-            'SELECT id, config_key, value FROM app_config WHERE value LIKE ? LIMIT 200'
-        );
-        $stmt->execute([$like]);
+        $sql = "SELECT id, title as display_name, status 
+                FROM forms 
+                WHERE user_id = ? 
+                AND (title LIKE ? OR MATCH(title) AGAINST(? IN BOOLEAN MODE)) 
+                LIMIT 50";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([(int)$uid, $like, $term . '*']);
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
         Response::json(['results' => $rows]);
     }
 
