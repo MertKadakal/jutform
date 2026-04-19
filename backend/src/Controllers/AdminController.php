@@ -19,21 +19,17 @@ class AdminController
         if (!$user || ($user['role'] ?? '') !== 'admin') {
             Response::error('Forbidden', 403);
         }
+        
         $pdo = Database::getInstance();
-        $sql = 'SELECT SUM(
-            CAST(
-              SUBSTRING(
-                value,
-                LOCATE(\'"amount":\', value) + 9,
-                LOCATE(\',\', value, LOCATE(\'"amount":\', value)) - (LOCATE(\'"amount":\', value) + 9)
-              ) AS DECIMAL(10,2)
-            )
-          ) AS total
-          FROM app_config
-          WHERE config_key REGEXP \'^payment_[0-9]+$\'';
+        
+        // TICKET-008 Fix: We now use the structured 'payments' table instead of 
+        // parsing fragile JSON strings. This ensures the totals match finance records.
+        $sql = 'SELECT SUM(amount) AS total FROM payments';
+        
         $row = $pdo->query($sql)->fetch(\PDO::FETCH_ASSOC);
-        $total = $row['total'] ?? null;
-        Response::json(['revenue_total' => $total !== null ? (float) $total : 0.0]);
+        $total = $row['total'] ?? 0.0;
+        
+        Response::json(['revenue_total' => (float) $total]);
     }
 
     public function internalConfig(Request $request): void
