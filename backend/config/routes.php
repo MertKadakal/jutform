@@ -28,7 +28,7 @@ return static function (Router $router): void {
 
     $router->get('/api/forms/{id}/submissions/export', [SubmissionController::class, 'exportCsv'], [AuthMiddleware::class]);
     $router->get('/api/forms/{id}/submissions', [SubmissionController::class, 'index'], [AuthMiddleware::class]);
-    $router->post('/api/forms/{id}/submissions', [SubmissionController::class, 'create']);
+    $router->post('/api/forms/{id}/submissions', [SubmissionController::class, 'create'], [\JutForm\Middleware\RateLimitMiddleware::class]);
 
     $router->get('/api/search', [SearchController::class, 'search'], [AuthMiddleware::class]);
     $router->get('/api/search/advanced', [SearchController::class, 'advancedSearch'], [AuthMiddleware::class]);
