@@ -7,14 +7,28 @@ use PDO;
 
 class Submission
 {
-    public static function findByForm(int $formId, int $limit, int $offset): array
+    public static function findByForm(int $formId, int $limit, int $offset, ?string $until = null): array
     {
-        $stmt = Database::getInstance()->prepare(
-            'SELECT * FROM submissions WHERE form_id = ? ORDER BY submitted_at DESC LIMIT ? OFFSET ?'
-        );
-        $stmt->bindValue(1, $formId, PDO::PARAM_INT);
-        $stmt->bindValue(2, $limit, PDO::PARAM_INT);
-        $stmt->bindValue(3, $offset, PDO::PARAM_INT);
+        $sql = 'SELECT * FROM submissions WHERE form_id = ?';
+        $params = [$formId];
+        
+        if ($until) {
+            $sql .= ' AND submitted_at <= ?';
+            $params[] = $until;
+        }
+        
+        $sql .= ' ORDER BY submitted_at DESC LIMIT ? OFFSET ?';
+        
+        $pdo = Database::getInstance();
+        $stmt = $pdo->prepare($sql);
+        
+        $i = 1;
+        foreach ($params as $p) {
+            $stmt->bindValue($i++, $p, is_int($p) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt->bindValue($i++, $limit, PDO::PARAM_INT);
+        $stmt->bindValue($i, $offset, PDO::PARAM_INT);
+        
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

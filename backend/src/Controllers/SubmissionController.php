@@ -37,8 +37,12 @@ class SubmissionController
         $page = max(1, (int) $request->query('page', 1));
         $limit = min(100, max(1, (int) $request->query('limit', 20)));
         $offset = ($page - 1) * $limit;
+        $until = (string) $request->query('until', '');
+        if ($until === '') {
+            $until = gmdate('Y-m-d H:i:s');
+        }
 
-        $rows = Submission::findByForm((int) $id, $limit, $offset);
+        $rows = Submission::findByForm((int) $id, $limit, $offset, $until);
 
         // Sidebar: the viewer's most recently updated forms, surfaced next to
         // the submissions table so they can jump between forms without going
