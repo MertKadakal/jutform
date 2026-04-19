@@ -4,6 +4,8 @@
  * All API and admin requests are routed through here via Nginx.
  */
 
+date_default_timezone_set('UTC');
+
 define('ROOT_PATH', dirname(__DIR__));
 
 require_once ROOT_PATH . '/vendor/autoload.php';

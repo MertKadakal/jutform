@@ -28,7 +28,7 @@ class EmailController
         if ($to === '') {
             Response::error('recipient_email required', 400);
         }
-        $scheduledAt = $when !== '' ? date('Y-m-d H:i:s', strtotime($when)) : date('Y-m-d H:i:s');
+        $scheduledAt = $when !== '' ? gmdate('Y-m-d H:i:s', strtotime($when)) : gmdate('Y-m-d H:i:s');
         $pdo = Database::getInstance();
         $stmt = $pdo->prepare(
             'INSERT INTO scheduled_emails (form_id, recipient_email, subject, body, scheduled_at, status, created_at)
