@@ -35,11 +35,23 @@ class SearchController
         if ($uid === null) {
             Response::error('Unauthorized', 401);
         }
+
         $field = (string) $request->query('field', 'title');
         $term = (string) $request->query('term', '');
+
+        // Whitelist allowed column names to prevent SQL Injection in the field parameter
+        $allowedFields = ['id', 'title', 'description', 'status'];
+        if (!in_array($field, $allowedFields, true)) {
+            $field = 'title';
+        }
+
         $pdo = Database::getInstance();
-        $sql = "SELECT * FROM forms WHERE {$field} LIKE '%" . str_replace("'", "''", $term) . "%' AND user_id = " . (int) $uid;
-        $stmt = $pdo->query($sql);
+        
+        // Use prepared statements for the term and user_id to prevent injection
+        $sql = "SELECT * FROM forms WHERE {$field} LIKE ? AND user_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['%' . $term . '%', (int) $uid]);
+        
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         Response::json(['forms' => $rows]);
     }
