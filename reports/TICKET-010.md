@@ -35,10 +35,10 @@ In short, the system provides a "proxy" for attackers to reach protected interna
 
 ## Response to Reporter
 
-Hi Security Team,
-
-I've completed a full investigation into the webhook URL handling issue you flagged. You were right to be concerned—our internal review confirmed that the existing filters weren't strong enough to block access to our private network, and some of our internal tools were relying on location rather than strict security checks.
-
-I have now updated our validation logic to block all internal addresses and added a proper authentication layer to our administrative endpoints. This ensures that even if an internal request is made, it cannot access sensitive data without the correct credentials.
-
-Thank you for your sharp eyes on this; the system is much more secure because of your report.
+>Hi Security Team,
+>
+>I've completed a full investigation into the webhook URL handling issue you flagged. You were right to be concerned—our internal review confirmed that the existing filters weren't strong enough to block access to our private network, and some of our internal tools were relying on location rather than strict security checks.
+>
+>I have now updated our validation logic to block all internal addresses and added a proper authentication layer to our administrative endpoints. This ensures that even if an internal request is made, it cannot access sensitive data without the correct credentials.
+>
+>Thank you for your sharp eyes on this; the system is much more secure because of your report.

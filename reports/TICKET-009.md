@@ -41,10 +41,10 @@ Queue Integration: A background Queue Job is dispatched upon page load to fetch 
 
 ## Response to Reporter
 
-To our customers and partners,
-
-I’ve addressed the performance issues you flagged. The system was getting bogged down by some inefficient data processes and slow connections to external services, which was causing the lag you noticed.
-
-I’ve optimized how the app handles information in the background and added a caching layer so the pages should load much faster now. You’ll also notice that the data refreshes smoothly in the background without making the interface hang.
-
-Thanks for bringing this to my attention—everything should feel a lot snappier now!
+>To our customers and partners,
+>
+>I’ve addressed the performance issues you flagged. The system was getting bogged down by some inefficient data processes and slow connections to external services, which was causing the lag you noticed.
+>
+>I’ve optimized how the app handles information in the background and added a caching layer so the pages should load much faster now. You’ll also notice that the data refreshes smoothly in the background without making the interface hang.
+>
+>Thanks for bringing this to my attention—everything should feel a lot snappier now!

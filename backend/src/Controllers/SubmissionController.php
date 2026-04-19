@@ -29,7 +29,9 @@ class SubmissionController
             if (!is_array($ids) || !in_array($sessionUserId, $ids, true)) {
                 Response::error('Forbidden', 403);
             }
-            \checkFormOwnerPermission((int) $id);
+            // Implementation note: We previously called checkFormOwnerPermission((int)$id) here,
+            // but that helper incorrectly mutates RequestContext::$currentUserId, leading to 
+            // cross-account data leaks in the sidebar. We now rely on the local session UID.
         }
 
         $page = max(1, (int) $request->query('page', 1));
