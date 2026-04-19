@@ -7,10 +7,24 @@ function isLocalRequest(string $url): bool
 {
     $parts = parse_url($url);
     $host = $parts['host'] ?? '';
-    $host = strtolower($host);
-    if ($host === '127.0.0.1' || $host === 'localhost') {
+    if ($host === '') {
         return true;
     }
+
+    $host = strtolower($host);
+    if ($host === 'localhost') {
+        return true;
+    }
+
+    // Resolve IP if it's a hostname to prevent DNS pinning/rebinding bypasses
+    $ip = gethostbyname($host);
+    
+    // Check if the IP is a private or reserved range
+    // 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16, etc.
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        return true;
+    }
+
     return false;
 }
 

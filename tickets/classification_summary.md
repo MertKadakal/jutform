@@ -4,7 +4,7 @@ This file contains the classification of tickets in the `tickets` folder based o
 
 | Priority | Ticket ID | Description |
 | :--- | :--- | :--- |
-| **Critical** | TICKET-009 | Intermittent Outages |
+| **Critical** | TICKET-009 | Intermittent Outages | ***
 | **Critical** | TICKET-010 | Webhook Review |
 | **Critical** | TICKET-011 | Submissions Incident |
 | **Critical** | TICKET-012 | Advanced Search Review |

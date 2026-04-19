@@ -38,9 +38,20 @@ class AdminController
 
     public function internalConfig(Request $request): void
     {
-        if (!\isInternalRequest()) {
+        $uid = RequestContext::$currentUserId;
+        if ($uid === null) {
+            Response::error('Unauthorized', 401);
+        }
+        $user = \JutForm\Models\User::find($uid);
+        if (!$user || ($user['role'] ?? '') !== 'admin') {
             Response::error('Forbidden', 403);
         }
+        
+        // Safety in depth: still check if it's internal traffic if we want to be strict
+        if (!\isInternalRequest()) {
+            Response::error('Access restricted to internal network', 403);
+        }
+
         $pdo = Database::getInstance();
         $rows = $pdo->query('SELECT config_key, value FROM app_config ORDER BY id DESC LIMIT 50')
             ->fetchAll(\PDO::FETCH_ASSOC);
