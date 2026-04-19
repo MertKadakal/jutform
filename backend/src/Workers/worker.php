@@ -3,6 +3,7 @@
 use JutForm\Core\QueueService;
 use JutForm\Workers\EmailWorker;
 use JutForm\Workers\FormSetupWorker;
+use JutForm\Workers\AnalyticsWorker;
 
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 require_once dirname(__DIR__) . '/Helpers/functions.php';
@@ -19,6 +20,8 @@ while (true) {
             FormSetupWorker::handle($data);
         } elseif ($name === 'submission_notify') {
             EmailWorker::handleSubmissionNotify($data);
+        } elseif ($name === 'analytics_refresh') {
+            AnalyticsWorker::handle($data);
         }
     }
     try {

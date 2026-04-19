@@ -22,20 +22,19 @@ class FormController
         if ($uid === null) {
             Response::error('Unauthorized', 401);
         }
-        $forms = Form::findByUser($uid);
+        $owner = User::find($uid);
+        $ownerDisplayName = $owner['display_name'] ?? $owner['username'] ?? '';
+        
+        $forms = Form::findByUserWithStats($uid);
         $out = [];
         foreach ($forms as $f) {
-            $formId = (int) $f['id'];
-            $count = Submission::countByForm($formId);
-            $latest = Submission::getLatestSubmittedAt($formId);
-            $owner = User::find((int) $f['user_id']);
             $out[] = [
-                'id' => $formId,
+                'id' => (int) $f['id'],
                 'title' => $f['title'],
                 'status' => $f['status'],
-                'submission_count' => $count,
-                'last_submission_at' => $latest,
-                'owner_display_name' => $owner['display_name'] ?? $owner['username'] ?? '',
+                'submission_count' => (int) ($f['submission_count'] ?? 0),
+                'last_submission_at' => $f['last_submission_at'],
+                'owner_display_name' => $ownerDisplayName,
             ];
         }
         Response::json(['forms' => $out]);
@@ -135,7 +134,13 @@ class FormController
         if ($uid === null) {
             Response::error('Unauthorized', 401);
         }
+        
+        // Serve from cache immediately
         $data = ExternalApiService::fetchAnalyticsAggregate();
+        
+        // Dispatch job to refresh cache in background
+        QueueService::dispatch('analytics_refresh', []);
+        
         Response::json(['analytics' => $data, 'user_id' => $uid]);
     }
 }

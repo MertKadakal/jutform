@@ -24,6 +24,19 @@ class Form
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function findByUserWithStats(int $userId): array
+    {
+        $sql = "SELECT f.*, 
+                       (SELECT COUNT(*) FROM submissions s WHERE s.form_id = f.id) as submission_count,
+                       (SELECT MAX(submitted_at) FROM submissions s WHERE s.form_id = f.id) as last_submission_at
+                FROM forms f
+                WHERE f.user_id = ?
+                ORDER BY f.updated_at DESC";
+        $stmt = Database::getInstance()->prepare($sql);
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function create(array $data): int
     {
         $pdo = Database::getInstance();
