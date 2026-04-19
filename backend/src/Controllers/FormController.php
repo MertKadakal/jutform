@@ -85,15 +85,14 @@ class FormController
             Response::error('Not found', 404);
         }
         $resources = FormResource::forForm((int) $id);
-        if (count($resources) === 0) {
-            Response::error('Form setup incomplete', 404);
-        }
         $settings = KeyValueStore::allForForm((int) $id);
+        
         $payload = [
             'form' => $form,
             'settings' => $settings,
             'resources' => $resources,
             'mode' => $editMode ? 'edit' : 'view',
+            'setup_pending' => count($resources) === 0,
         ];
         Response::json($payload);
     }
