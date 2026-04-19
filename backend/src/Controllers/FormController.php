@@ -120,11 +120,14 @@ class FormController
         }
         if (isset($body['settings']) && is_array($body['settings'])) {
             foreach ($body['settings'] as $sk => $sv) {
-                if (is_bool($sv)) {
-                    KeyValueStore::set((int) $id, (string) $sk, $sv ? 'true' : 'false');
-                } else {
-                    KeyValueStore::set((int) $id, (string) $sk, is_string($sv) ? $sv : json_encode($sv));
+                $val = (string)$sv;
+                // Normalize truthy values to 'true' string
+                if ($sv === true || $sv === 'true' || $sv === 1 || $sv === '1' || $sv === 'on') {
+                    $val = 'true';
+                } elseif ($sv === false || $sv === 'false' || $sv === 0 || $sv === '0' || $sv === 'off') {
+                    $val = 'false';
                 }
+                KeyValueStore::set((int) $id, (string) $sk, $val);
             }
         }
         Response::json(['ok' => true]);

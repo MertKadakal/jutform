@@ -20,7 +20,11 @@ class KeyValueStore
     public static function getBool(int $formId, string $key): bool
     {
         $v = self::get($formId, $key);
-        return $v === 'true';
+        if ($v === null) {
+            return false;
+        }
+        $v = strtolower(trim($v));
+        return in_array($v, ['true', '1', 'on', 'yes'], true);
     }
 
     public static function set(int $formId, string $key, string $value): void
