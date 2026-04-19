@@ -26,8 +26,9 @@ Result: Thanks to OR 1=1, the query always returns true, and the attacker can se
 
 ## Response to Reporter
 
-Write a short reply to the person who raised the issue. Keep it non-technical and helpful.
-
-> Hi [name],
->
-> ...
+> Hi Security Team,
+> Thank you for reporting the vulnerability in the advanced search endpoint. I have completed the investigation and confirmed that the `field` parameter was indeed susceptible to SQL injection.
+> I have implemented a two-layered defense:
+> 1. **Strict Whitelisting:** The `field` parameter is now validated against a fixed list of allowed columns (`id`, `title`, `description`, `status`). Any other value defaults to `title`, preventing column-name injection.
+> 2. **Parameterized Queries:** We have migrated the entire query construction to use PDO prepared statements. This ensures that the search term and user ID are handled as data, eliminating the risk of command injection through the `term` parameter.
+The endpoint is now secure and adheres to our security best practices. We appreciate your diligent review!
