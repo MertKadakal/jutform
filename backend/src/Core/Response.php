@@ -111,7 +111,8 @@ class Response
         http_response_code(200);
         header('Content-Type: text/csv; charset=UTF-8');
         header('Content-Disposition: attachment; filename="' . str_replace('"', '', $filename) . '"');
-        echo $content;
+        // Prepend UTF-8 BOM for Excel compatibility
+        echo "\xEF\xBB\xBF" . $content;
         exit;
     }
 }

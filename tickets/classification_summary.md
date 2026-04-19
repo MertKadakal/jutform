@@ -16,6 +16,6 @@ This file contains the classification of tickets in the `tickets` folder based o
 | **Medium** | TICKET-001 | Scheduled Emails | ***
 | **Medium** | TICKET-003 | Require Login Toggle | ***
 | **Medium** | TICKET-005 | Edit Newly Created Form | ***
-| **Medium** | TICKET-013 | CSV Export Characters |
+| **Medium** | TICKET-013 | CSV Export Characters | ***
 | **Medium** | TICKET-014 | Submissions Pagination |
 | **Medium** | TICKET-015 | File Uploads |
